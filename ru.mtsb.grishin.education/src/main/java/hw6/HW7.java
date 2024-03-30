@@ -3,7 +3,7 @@ package hw6;
 
 import java.util.*;
 
-public class HW6 {
+public class HW7 {
     public static void main(String[] args) throws invalidAnimalBirthDateException {
         int animalNumber = 53;
         AnimalRepository ar = new AnimalsRepositoryImpl();
