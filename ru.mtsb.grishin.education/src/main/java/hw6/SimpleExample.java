@@ -43,19 +43,14 @@ public class SimpleExample {
                         }
                     System.out.println("Thread "+ taskNumber+" starts from "+myStart + " to "+myEnd);
                 }
-                //System.out.println(this.getClass().getSimpleName() + "-" + taskNumber
-                //        + " incremented count 100 times and getting value = " + myCount);
             });
 
             thread.start();
-        }
-
-
-        // Ждемc
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         resList=resList.stream().sorted().collect(Collectors.toList());
         System.out.println(resList);

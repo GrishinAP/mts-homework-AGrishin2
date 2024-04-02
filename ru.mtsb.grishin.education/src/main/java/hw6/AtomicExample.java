@@ -12,20 +12,14 @@ public class AtomicExample {
                 for (int k = 0; k < incrNum; k++) {
                     myCount = count.incrementAndGet();
                 }
-                //System.out.println(this.getClass().getSimpleName() + "-" + taskNumber
-                //        + " incremented count 100 times and getting value = " + myCount);
             });
             thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
-
-
-        // Ждемc
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         System.out.println("After all threads ended count = " + count.get());
     }
 
