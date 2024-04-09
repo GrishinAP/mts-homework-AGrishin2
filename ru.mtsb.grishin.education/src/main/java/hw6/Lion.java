@@ -10,4 +10,7 @@ public class Lion extends Predator {
             this.cost  = cost;
             this.birthday = birthday;
         }
+    public Lion() {
+        super();
+    }
 }

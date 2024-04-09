@@ -10,4 +10,12 @@ public class Cat extends Pet {
         this.cost  = cost;
         this.birthday = birthday;
     }
+    public Cat() {
+        super();
+    }
+
+    @Override
+    public void setSecretInformation(String secret) {
+
+    }
 }

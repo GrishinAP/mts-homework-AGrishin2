@@ -11,4 +11,7 @@ public class Wolf extends Predator {
         this.cost  = cost;
         this.birthday = birthday;
     }
+    public Wolf() {
+        super();
+    }
 }

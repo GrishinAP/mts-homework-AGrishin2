@@ -2,7 +2,7 @@ package hw6;
 
 import java.time.LocalDate;
 
-public class Pet extends AbstractAnimal {
+public abstract class Pet extends AbstractAnimal {
     public Pet(){
         super();
         this.character = "Pet";

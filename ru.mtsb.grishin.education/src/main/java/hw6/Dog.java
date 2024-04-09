@@ -10,4 +10,7 @@ public class Dog extends Pet {
         this.cost  = cost;
         this.birthday = birthday;
     }
+    public Dog() {
+        super();
+    }
 }
