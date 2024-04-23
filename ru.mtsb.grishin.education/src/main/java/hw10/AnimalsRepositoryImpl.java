@@ -1,16 +1,11 @@
-package hw6;
+package hw10;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
-//import com.fasterxml.jackson.*;
+import hw6.Animal;
+import hw6.invalidAnimalBirthDateException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -21,7 +16,6 @@ import java.nio.file.Path;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,35 +32,41 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
 
     public final static SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm");
 
+
+    @PostConstruct
+    private void postConstruct() {
+
+    }
+
     @Override
     public HashMap<String, LocalDate> findLeapYearNames(Animal[] animals) throws invalidAnimalBirthDateException {
         SearchService ss = new SearchServiceImpl();
         //HashMap<String, LocalDate> retMap = new HashMap<>();
         Map<String, LocalDate> map = Arrays.stream(animals)
                 .filter(a -> a.getBirthday().isLeapYear())
-                .collect(Collectors.toMap(a -> a.getBreed() + a.getName() + String.valueOf(a.getBirthday().getDayOfYear()), Animal::getBirthday));//                        + Animal::getName(), Animal::getBirthday()));
+                .collect(Collectors.toMap(a -> a.getBreed() + a.getName() + String.valueOf(a.getBirthday().getDayOfYear()), hw6.Animal::getBirthday));//                        + Animal::getName(), Animal::getBirthday()));
         return (HashMap<String, LocalDate>) map;
     }
 
     @Override
-    public HashMap<Animal, Integer> findOlderAnimal(Animal[] animals, Integer n) {
+    public HashMap<hw6.Animal, Integer> findOlderAnimal(hw6.Animal[] animals, Integer n) {
         //HashMap<Animal, Integer> retMap = new HashMap<>();
-        Animal defAnimal = null;
+        hw6.Animal defAnimal = null;
         int maxAge = 0;
         int nowYear = LocalDate.now().getYear();
-        for (Animal animal : animals) {
+        for (hw6.Animal animal : animals) {
             if (nowYear - animal.getBirthday().getYear() > maxAge) maxAge = nowYear - animal.getBirthday().getYear();
         }
-        Map<Animal, Integer> map = Arrays.stream(animals).filter(a -> nowYear - a.getBirthday().getYear() > n)
+        Map<hw6.Animal, Integer> map = Arrays.stream(animals).filter(a -> nowYear - a.getBirthday().getYear() > n)
                 .collect(Collectors.toMap(a -> a, a -> nowYear - a.getBirthday().getYear()));
         if (map.isEmpty()) {
             map.put(defAnimal, maxAge);
         }
-        AnimalSerializer animalSerializer = new AnimalSerializer(Animal.class);
+        AnimalSerializer animalSerializer = new AnimalSerializer(hw6.Animal.class);
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule module =
                 new SimpleModule("AnimalSerializer");
-        module.addSerializer(Animal.class, animalSerializer);
+        module.addSerializer(hw6.Animal.class, animalSerializer);
         mapper.registerModule(module);
         //mapper.setDateFormat(df);
         String json = null;
@@ -90,7 +90,7 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
             System.out.println(mapper.writeValueAsString(map));
             //final String FIND = "secretInfomation\":";
             String tmp = "";
-            for (Animal mapItem : map.keySet()) {
+            for (hw6.Animal mapItem : map.keySet()) {
                 json = mapper.writeValueAsString(mapItem) + "\n";
 //                tmp = json.substring(json.indexOf(FIND) + FIND.length());
 //                tmp = tmp.substring(0, tmp.indexOf("\"}") + 1);
@@ -110,19 +110,19 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
             throw new RuntimeException(e);
         }
         System.out.println(json);
-        return (HashMap<Animal, Integer>) map;
+        return (HashMap<hw6.Animal, Integer>) map;
     }
 
     @Override
-    public HashMap<String, List<Animal>> findDuplicate(Animal[] animals) {
+    public HashMap<String, List<hw6.Animal>> findDuplicate(hw6.Animal[] animals) {
         HashMap<String, Integer> retMap = new HashMap<>();
         int count;
-        Map<String, List<Animal>> map = Arrays.stream(animals).collect(Collectors.groupingBy(Animal::getBreed));
+        Map<String, List<hw6.Animal>> map = Arrays.stream(animals).collect(Collectors.groupingBy(hw6.Animal::getBreed));
 
-        return (HashMap<String, List<Animal>>) map;
+        return (HashMap<String, List<hw6.Animal>>) map;
     }
 
-    public Double findAverageAge(Animal[] animals) {
+    public Double findAverageAge(hw6.Animal[] animals) {
         int nowYear = LocalDate.now().getYear();
         DoubleSummaryStatistics dss = Arrays.stream(animals).map(a -> nowYear - a.getBirthday().getYear())
                 .collect(Collectors.summarizingDouble(d -> d));
@@ -131,8 +131,8 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
         return avrAge;
     }
 
-    public List<Animal> findOldAndExpensive(Animal[] animals) {
-        DoubleSummaryStatistics dss = Arrays.stream(animals).collect(Collectors.summarizingDouble(Animal::getCost));
+    public List<hw6.Animal> findOldAndExpensive(hw6.Animal[] animals) {
+        DoubleSummaryStatistics dss = Arrays.stream(animals).collect(Collectors.summarizingDouble(hw6.Animal::getCost));
         Double avrCost = dss.getAverage();
         System.out.println("\nСредняя цена животных = " + avrCost);
         int nowYear = LocalDate.now().getYear();
@@ -142,9 +142,9 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
         return list;
     }
 
-    public List<Animal> findMinConstAnimals(Animal[] animals) {
+    public List<hw6.Animal> findMinConstAnimals(hw6.Animal[] animals) {
         Collator ruCollator = Collator.getInstance(new Locale("ru", "RU"));
-        List list = Arrays.stream(animals).sorted(Comparator.comparingDouble(Animal::getCost))
+        List list = Arrays.stream(animals).sorted(Comparator.comparingDouble(hw6.Animal::getCost))
                 .limit(3)
                 .map(a -> a.getName())
                 .sorted(ruCollator::compare)
@@ -154,9 +154,9 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
     }
 }
 
-class MyDateComparator implements Comparator<Animal> {
+class MyDateComparator implements Comparator<hw6.Animal> {
 
-    public int compare(Animal a, Animal b) {
+    public int compare(hw6.Animal a, Animal b) {
         return a.getBirthday().compareTo(b.getBirthday());
     }
 

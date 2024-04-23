@@ -1,4 +1,6 @@
-package hw6;
+package hw10;
+
+import hw6.AbstractAnimal;
 
 import java.time.LocalDate;
 

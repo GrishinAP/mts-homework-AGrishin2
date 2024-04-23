@@ -1,18 +1,28 @@
-package hw6;
+package hw10;
 
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
+import hw6.RandValues;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public interface Animal {
-    static final String DIR = "src/main/resources/secretStore/";
-     static final String PATH = DIR+"secretInformation.txt";
-
+    String DIR = "src/main/resources/secretStore/";
+    String PATH = DIR+"secretInformation.txt";
+    String character    = "";
+    String breed        = "";
+    String name         = "";
+    Double cost         = 0.0;
+    LocalDate birthday  = null;
+    String secretInformation = "";
      String getBreed();
      String getName();
      Double getCost();

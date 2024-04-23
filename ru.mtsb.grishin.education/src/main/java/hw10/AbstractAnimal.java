@@ -1,7 +1,7 @@
-package hw6;
+package hw10;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import hw6.Animal;
 
 import java.time.LocalDate;
 import java.util.Arrays;
